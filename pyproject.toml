@@ -1,6 +1,6 @@
 [project]
 name = "mediapipe-hand-crop-fix"
-description = "Code for Optimizing Hand Area Detection in MediaPipe Holistic Full-Body Pose Estimation to Improve Accuracy and Prevent Downstream Errors"
+description = "Code for Optimizing Hand Region Detection in MediaPipe Holistic Full-Body Pose Estimation to Improve Accuracy and Avoid Downstream Errors"
 version = "0.0.1"
 authors = [
     { name = "Amit Moryossef", email = "amitmoryossef@gmail.com" },
@@ -8,7 +8,10 @@ authors = [
 readme = "README.md"
 dependencies = [
     "pose-format",
-    "mediapipe"
+    "mediapipe",
+    "tqdm",
+    "opencv-python",
+    "pykan"
 ]
 
 [project.optional-dependencies]

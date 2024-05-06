@@ -1,3 +1,5 @@
 .idea/
 build/
 mediapipe_crop_estimate.egg-info/
+mediapipe_crop_estimate/lightning_logs
+mediapipe_crop_estimate/figures
