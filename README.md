@@ -23,7 +23,8 @@ To indicate the orientation of the bounding box, we draw a blue line on the bott
 ## Usage
 
 ```bash
-pip install git+https://github.com/sign-language-processing/mediapipe-hand-crop-fix
+git clone https://github.com/sign-language-processing/mediapipe-hand-crop-fix.git
+cd mediapipe-hand-crop-fix
 ```
 
 Download and extract the Panoptic Hand Pose Dataset:
