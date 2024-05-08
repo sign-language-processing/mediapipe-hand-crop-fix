@@ -31,6 +31,10 @@ disable = [
     "C0115", # Missing class docstring
     "C0116", # Missing function or method docstring
 ]
+good-names = ["i", "f", "x", "y", "p1", "p2"]
+
+[tool.pylint.typecheck]
+generated-members = ["cv2.*", "torch.*"]
 
 [tool.setuptools]
 packages = [
