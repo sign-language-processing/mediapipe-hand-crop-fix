@@ -4,6 +4,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
+import matplotlib.pyplot as plt
 
 from mediapipe_crop_estimate.evaluation_utils import intersection_over_union
 from mediapipe_crop_estimate.mediapipe_utils import holistic_body_landmarks_to_rect, Rect
@@ -56,6 +57,10 @@ methods = {
 with open(annotations_path, "r") as f:
     annotations = json.load(f)
 
+# plot a histogram
+fig = plt.figure()
+
+methods_ious = {}
 for method_name, method in methods.items():
     center_error = 0
     size_error = 0
@@ -63,6 +68,8 @@ for method_name, method in methods.items():
     iou_total = 0
 
     min_iou = 1
+
+    method_ious = []
 
     for annotation in annotations:
         # if annotation["file"] not in ["data/hand_labels/manual_train/036362775_01_l.jpg",
@@ -82,6 +89,7 @@ for method_name, method in methods.items():
         if iou < min_iou:
             min_iou = iou
 
+        method_ious.append(iou)
         iou_total += iou
         center_error += np.linalg.norm(np.array([rect.x_center * aspect_ratio, rect.y_center]) -
                                        np.array([gold_rect.x_center * aspect_ratio, gold_rect.y_center]))
@@ -96,3 +104,20 @@ for method_name, method in methods.items():
     print(f"Rotation error: {rotation_error / len(annotations):.2f}")
     print(f"Min IOU: {min_iou:.2f}")
     print()
+
+    plt.hist(method_ious, bins=20, alpha=0.5, label=method_name, density=True)
+    methods_ious[method_name] = method_ious
+
+plt.legend(loc='upper left')
+plt.gca().axes.get_yaxis().set_visible(False)
+plt.tight_layout()
+plt.savefig("histogram.pdf")
+
+# count how many times each method wins
+wins = {method_name: 0 for method_name in methods}
+num_annotations = len(methods_ious["original"])
+for i in range(num_annotations):
+    ious = {method_name: method_ious[i] for method_name, method_ious in methods_ious.items()}
+    best_method = max(ious, key=lambda k: ious[k])
+    wins[best_method] += 1
+print("Wins", {k: v / num_annotations for k, v in wins.items()})
